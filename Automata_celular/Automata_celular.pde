@@ -1,120 +1,87 @@
-import wellen.*; 
-//regla 31
-int separacio=3;
-int[] cell = new int[separacio];
-int[] temp = new int[separacio];
-int costat;
-int y = 0;
-//notes GM
-int[] notesEscala = {55, 57, 59, 60, 62, 64, 66, 67};
-void setup() {
-  size(800, 800);
-  rectMode(CENTER);
-  costat = width/separacio;
-  y = costat/2;
-  background(255);
-  for (int i =0; i<cell.length; i++) {
-    cell[i] = (int)random(0, 2);
-  }
-  //cell[] = [0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0];
-}
-void draw() {
+int[][] casilla;
 
-  if (frameCount%30==0) {
-    createLine();
-  }
-  tocarNotes();
+void setup(){
+  casilla = new int[8][8];
+  InicializarPrimeraFila();
 }
 
-void createLine() {
-  for (int i = 0; i<cell.length; i++) {
-    if (cell[i]==1)
-    {
-      stroke(0); strokeWeight(1);
-      fill(0);
-    } else {
-      stroke(255); strokeWeight(1);
-      fill(255);
+void draw(){
+  for(int i=0; i<casilla[0].length; i++){
+    for(int j=0; i<casilla.length; i++){
+      updateCasiila(i, j);
     }
-    rect(i*costat + (costat/2), y, costat, costat);
-  }
-  novaLinea();
-
-  y +=costat;
-  if(y>height){
-    y = costat/2;
   }
 }
-void novaLinea() {
-  for (int i = 0; i<cell.length; i++) {
-    if (i==0) {
-      if (cell[i]==0&&cell[i+1]==0&&cell[separacio-1]==0) {
-        temp[i]= 0;
-      } else if (cell[i]==0&&cell[i+1]==0&&cell[separacio-1]==1) {
-        temp[i]= 1;
-      } else if (cell[i]==0&&cell[i+1]==1&&cell[separacio-1]==0) {
-        temp[i]= 0;
-      } else if (cell[i]==0&&cell[i+1]==1&&cell[separacio-1]==1) {
-        temp[i]= 1;
-      } else if (cell[i]==1&&cell[i+1]==0&&cell[separacio-1]==0) {
-        temp[i]= 1;
-      } else if (cell[i]==1&&cell[i+1]==0&&cell[separacio-1]==1) {
-        temp[i]= 0;
-      } else if (cell[i]==1&&cell[i+1]==1&&cell[separacio-1]==0) {
-        temp[i]= 1;
-      } else if (cell[i]==1&&cell[i+1]==1&&cell[separacio-1]==1) {
-        temp[i]= 0;
+
+void InicializarPrimeraFila(){
+  casilla[0][0] = 0;
+  casilla[0][1] = 1;
+  casilla[0][2] = 0;
+  casilla[0][3] = 1;
+  casilla[0][4] = 1;
+  casilla[0][5] = 0;
+  casilla[0][6] = 0;
+  casilla[0][7] = 1;
+}
+
+void updateCasiila(int i, int j){
+  if(i==0){
+    //Primera Fila
+    if        (casilla[7][j-1]== 1 && casilla[7][j]== 1 && casilla[7][j+1]==1){
+        casilla[i][j]= 0;
+      }else if(casilla[7][j-1]== 1 && casilla[7][j]== 1 && casilla[7][j+1]==0){
+        casilla[i][j]= 1;
+      }else if(casilla[7][j-1]== 1 && casilla[7][j]== 0 && casilla[7][j+1]==1){
+        casilla[i][j]= 0;
+      }else if(casilla[7][j-1]== 1 && casilla[7][j]== 0 && casilla[7][j+1]==0){
+        casilla[i][j]= 1;
+      }else if(casilla[7][j-1]== 0 && casilla[7][j]== 1 && casilla[7][j+1]==1){
+        casilla[i][j]= 1;
+      }else if(casilla[7][j-1]== 0 && casilla[7][j]== 1 && casilla[7][j+1]==0){
+        casilla[i][j]= 0;
+      }else if(casilla[7][j-1]== 0 && casilla[7][j]== 0 && casilla[7][j+1]==1){
+        casilla[i][j]= 1;
+      }else if(casilla[7][j-1]== 0 && casilla[7][j]== 0 && casilla[7][j+1]==0){
+        casilla[i][j]= 0;
       }
-    } else {
-      if (cell[i%cell.length]==0&&cell[(i+1)%cell.length]==0&&cell[(i-1)%cell.length]==0) {
-        temp[i]= 0;
-      } else if (cell[i%cell.length]==0&&cell[(i+1)%cell.length]==0&&cell[(i-1)%cell.length]==1) {
-        temp[i]= 1;
-      } else if (cell[i%cell.length]==0&&cell[(i+1)%cell.length]==1&&cell[(i-1)%cell.length]==0) {
-        temp[i]= 0;
-      } else if (cell[i%cell.length]==0&&cell[(i+1)%cell.length]==1&&cell[(i-1)%cell.length]==1) {
-        temp[i]= 1;
-      } else if (cell[i%cell.length]==1&&cell[(i+1)%cell.length]==0&&cell[(i-1)%cell.length]==0) {
-        temp[i]= 1;
-      } else if (cell[i%cell.length]==1&&cell[(i+1)%cell.length]==0&&cell[(i-1)%cell.length]==1) {
-        temp[i]= 0;
-      } else if (cell[i%cell.length]==1&&cell[(i+1)%cell.length]==1&&cell[(i-1)%cell.length]==0) {
-        temp[i]= 1;
-      } else if (cell[i%cell.length]==1&&cell[(i+1)%cell.length]==1&&cell[(i-1)%cell.length]==1) {
-        temp[i]= 0;
+  }else{
+      if      (casilla[i-1][j-1]== 1 && casilla[i-1][j]== 1 && casilla[i-1][j+1]==1){
+        casilla[i][j]= 0;
+      }else if(casilla[i-1][j-1]== 1 && casilla[i-1][j]== 1 && casilla[i-1][j+1]==0){
+        casilla[i][j]= 1;
+      }else if(casilla[i-1][j-1]== 1 && casilla[i-1][j]== 0 && casilla[i-1][j+1]==1){
+        casilla[i][j]= 0;
+      }else if(casilla[i-1][j-1]== 1 && casilla[i-1][j]== 0 && casilla[i-1][j+1]==0){
+        casilla[i][j]= 1;
+      }else if(casilla[i-1][j-1]== 0 && casilla[i-1][j]== 1 && casilla[i-1][j+1]==1){
+        casilla[i][j]= 1;
+      }else if(casilla[i-1][j-1]== 0 && casilla[i-1][j]== 1 && casilla[i-1][j+1]==0){
+        casilla[i][j]= 0;
+      }else if(casilla[i-1][j-1]== 0 && casilla[i-1][j]== 0 && casilla[i-1][j+1]==1){
+        casilla[i][j]= 1;
+      }else if(casilla[i-1][j-1]== 0 && casilla[i-1][j]== 0 && casilla[i-1][j+1]==0){
+        casilla[i][j]= 0;
       }
     }
-    //copiar arrays
-    cell[i]=temp[i];
+    
+    /*POSSIBLE SOLUCIÓ????:
+      if      (casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==1){
+        casilla[i][j]= 0;
+      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==0){
+        casilla[i][j]= 1;
+      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==1){
+        casilla[i][j]= 0;
+      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==0){
+        casilla[i][j]= 1;
+      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==1){
+        casilla[i][j]= 1;
+      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==0){
+        casilla[i][j]= 0;
+      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==1){
+        casilla[i][j]= 1;
+      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==0){
+        casilla[i][j]= 0;
+      }
+      */
+      
   }
-}
-
-void tocarNotes() {
-  if(comparaArray(cell, 0, 0, 0)){
-    Tone.note_on(notesEscala[0], 100);
-  }else if(comparaArray(cell, 0, 0, 1)){
-    Tone.note_on(notesEscala[1], 100);
-  }else if(comparaArray(cell, 0, 1, 0)){
-    Tone.note_on(notesEscala[2], 100);
-  }else if(comparaArray(cell, 0, 1, 1)){
-    Tone.note_on(notesEscala[3], 100);
-  }else if(comparaArray(cell, 1, 0, 0)){
-    Tone.note_on(notesEscala[4], 100);
-  }else if(comparaArray(cell, 1, 0, 1)){
-    Tone.note_on(notesEscala[5], 100);
-  }else if(comparaArray(cell, 1, 1, 0)){
-    Tone.note_on(notesEscala[6], 100);
-  }else if(comparaArray(cell, 1, 1, 1)){
-    Tone.note_on(notesEscala[7], 100);
-  }
-}
-
-boolean comparaArray(int[] array, int ... valors){
-  boolean b = true;
-  for(int i=0; i<valors.length; i++){
-    if(array[i]!=valors[i]){
-      return false;
-    }
-  }
-  return b;
-}
