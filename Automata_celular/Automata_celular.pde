@@ -11,6 +11,7 @@ void draw(){
       updateCasiila(i, j);
     }
   }
+  printNotas();
 }
 
 void InicializarPrimeraFila(){
@@ -83,5 +84,11 @@ void updateCasiila(int i, int j){
         casilla[i][j]= 0;
       }
       */
-      
+  }
+  
+  void printNotas(){
+    for(int i=0; i<casilla[7].length; i++){
+      print(casilla[7][i]+ "  ,  ");
+    }
+    println("");
   }
