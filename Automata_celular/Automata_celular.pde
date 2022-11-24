@@ -1,94 +1,75 @@
-int[][] casilla;
+int[] rule = {1,0,0,0,0,0,0,0};  // Cellular Automata Rule (rule ___)
+int[] firstRow = {0, 0, 0, 1, 0, 0, 0};
+int[] currentGeneration;
+int[] nextGeneration;
+
+float cellWidth;  // Width of the Cells
+float cellHeight;  // Height of the Cells
+
+int numCasillas = 7;
 
 void setup(){
-  casilla = new int[8][8];
-  InicializarPrimeraFila();
+  size(800,800);
+  //Inicia los Arrays con el número de casillas
+  currentGeneration = new int[numCasillas]; currentGeneration = firstRow;
+  nextGeneration = new int[numCasillas];
+  // Calculates the width and height of the cells depending on the number of Items in a Generation
+  cellWidth = width / (float) numCasillas;
+  cellHeight = cellWidth;
 }
 
 void draw(){
-  for(int i=0; i<casilla[0].length; i++){
-    for(int j=0; i<casilla.length; i++){
-      updateCasiila(i, j);
+  
+  if(frameCount%40 ==0){
+    //DEmanar pq no fufa si es menor estricte
+  background(255);
+  for(int y=0; y<height-50; y+=cellHeight){
+    for(int x=0; x<width-50; x+=cellWidth){
+      displayRow(currentGeneration, x, y);
     }
+    calculateNextGeneration();
+    currentGeneration = nextGeneration;
   }
-  printNotas();
-}
-
-void InicializarPrimeraFila(){
-  casilla[0][0] = 0;
-  casilla[0][1] = 1;
-  casilla[0][2] = 0;
-  casilla[0][3] = 1;
-  casilla[0][4] = 1;
-  casilla[0][5] = 0;
-  casilla[0][6] = 0;
-  casilla[0][7] = 1;
-}
-
-void updateCasiila(int i, int j){
-  if(i==0){
-    //Primera Fila
-    if        (casilla[7][j-1]== 1 && casilla[7][j]== 1 && casilla[7][j+1]==1){
-        casilla[i][j]= 0;
-      }else if(casilla[7][j-1]== 1 && casilla[7][j]== 1 && casilla[7][j+1]==0){
-        casilla[i][j]= 1;
-      }else if(casilla[7][j-1]== 1 && casilla[7][j]== 0 && casilla[7][j+1]==1){
-        casilla[i][j]= 0;
-      }else if(casilla[7][j-1]== 1 && casilla[7][j]== 0 && casilla[7][j+1]==0){
-        casilla[i][j]= 1;
-      }else if(casilla[7][j-1]== 0 && casilla[7][j]== 1 && casilla[7][j+1]==1){
-        casilla[i][j]= 1;
-      }else if(casilla[7][j-1]== 0 && casilla[7][j]== 1 && casilla[7][j+1]==0){
-        casilla[i][j]= 0;
-      }else if(casilla[7][j-1]== 0 && casilla[7][j]== 0 && casilla[7][j+1]==1){
-        casilla[i][j]= 1;
-      }else if(casilla[7][j-1]== 0 && casilla[7][j]== 0 && casilla[7][j+1]==0){
-        casilla[i][j]= 0;
-      }
-  }else{
-      if      (casilla[i-1][j-1]== 1 && casilla[i-1][j]== 1 && casilla[i-1][j+1]==1){
-        casilla[i][j]= 0;
-      }else if(casilla[i-1][j-1]== 1 && casilla[i-1][j]== 1 && casilla[i-1][j+1]==0){
-        casilla[i][j]= 1;
-      }else if(casilla[i-1][j-1]== 1 && casilla[i-1][j]== 0 && casilla[i-1][j+1]==1){
-        casilla[i][j]= 0;
-      }else if(casilla[i-1][j-1]== 1 && casilla[i-1][j]== 0 && casilla[i-1][j+1]==0){
-        casilla[i][j]= 1;
-      }else if(casilla[i-1][j-1]== 0 && casilla[i-1][j]== 1 && casilla[i-1][j+1]==1){
-        casilla[i][j]= 1;
-      }else if(casilla[i-1][j-1]== 0 && casilla[i-1][j]== 1 && casilla[i-1][j+1]==0){
-        casilla[i][j]= 0;
-      }else if(casilla[i-1][j-1]== 0 && casilla[i-1][j]== 0 && casilla[i-1][j+1]==1){
-        casilla[i][j]= 1;
-      }else if(casilla[i-1][j-1]== 0 && casilla[i-1][j]== 0 && casilla[i-1][j+1]==0){
-        casilla[i][j]= 0;
-      }
-    }
-    
-    /*POSSIBLE SOLUCIÓ????:
-      if      (casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==1){
-        casilla[i][j]= 0;
-      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==0){
-        casilla[i][j]= 1;
-      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==1){
-        casilla[i][j]= 0;
-      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==0){
-        casilla[i][j]= 1;
-      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==1){
-        casilla[i][j]= 1;
-      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 1 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==0){
-        casilla[i][j]= 0;
-      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==1){
-        casilla[i][j]= 1;
-      }else if(casilla[(i-1)%casilla.length][(j-1)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j)%casilla[i-1].length]== 0 && casilla[(i-1)%casilla.length][(j+1)%casilla[i-1].length]==0){
-        casilla[i][j]= 0;
-      }
-      */
   }
   
-  void printNotas(){
-    for(int i=0; i<casilla[7].length; i++){
-      print(casilla[7][i]+ "  ,  ");
-    }
-    println("");
+}
+
+void displayRow(int[] generation,int x, int y){
+  //Calcula si es blanco o negro
+  int valueCasilla = generation[x/((int)cellWidth)];
+  if(valueCasilla==0){
+    fill(255);
+  }else if(valueCasilla==1){
+    fill(0);
   }
+  //Dibuja la casilla
+  rect(x, y, cellWidth, cellHeight);
+}
+
+void calculateNextGeneration(){
+  for(int i=0; i<numCasillas; i++){
+    nextGeneration[i] = calculateCasilla(i);
+  }
+}
+
+int calculateCasilla(int n){
+  int l, c, r;
+ 
+  c= currentGeneration[n];
+ 
+  if(n==0){
+    l = currentGeneration[numCasillas-1];
+  }else{
+    l = currentGeneration[n-1];
+  }
+   
+  if(n==numCasillas-1){
+    r = currentGeneration[0];
+  }else{
+    r = currentGeneration[n+1];
+  }
+  
+   println(l +" , "+ c +" , " +r);
+  int Value = 4*l +c*2 +r;
+  return rule[Value];
+}
