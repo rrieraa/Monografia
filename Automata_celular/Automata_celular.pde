@@ -1,18 +1,23 @@
-int[] rule = {1,0,0,0,0,0,0,0};  // Cellular Automata Rule (rule ___)
+int[] rule = {0,0,1,0,1,1,0,0};  // Cellular Automata Rule (rule ___)
 int[] firstRow = {0, 0, 0, 1, 0, 0, 0};
 int[] currentGeneration;
 int[] nextGeneration;
+int[] lastGeneration;
 
 float cellWidth;  // Width of the Cells
 float cellHeight;  // Height of the Cells
 
 int numCasillas = 7;
+int numGeneration;
 
 void setup(){
   size(800,800);
+  frameRate(20);
+  background(255);
   //Inicia los Arrays con el número de casillas
   currentGeneration = new int[numCasillas]; currentGeneration = firstRow;
   nextGeneration = new int[numCasillas];
+  lastGeneration = new int[numCasillas];
   // Calculates the width and height of the cells depending on the number of Items in a Generation
   cellWidth = width / (float) numCasillas;
   cellHeight = cellWidth;
@@ -20,26 +25,88 @@ void setup(){
 
 void draw(){
   
-  if(frameCount%40 ==0){
-    //DEmanar pq no fufa si es menor estricte
-  background(255);
-  for(int y=0; y<height-50; y+=cellHeight){
-    for(int x=0; x<width-50; x+=cellWidth){
-      displayRow(currentGeneration, x, y);
-    }
+  if(frameCount <200){
+    //Dibuja la línea correspondiente
+    displayRow(numGeneration);
+    
+    //Calcula los valores de la próxima generación
     calculateNextGeneration();
-    currentGeneration = nextGeneration;
+    
+    //Asigna los valores calculados a la generación actual
+    swapArrays(currentGeneration, nextGeneration);
+    
+    
+    if(numGeneration < numCasillas){
+      numGeneration++;
+    }else{
+      //Se vuelve al prinicpio
+      numGeneration = 0;
+      //Last generation prende los valores de current generation
+      swapArrays(lastGeneration, currentGeneration);
+      //Se analizala última fila para saber que notas se van a tocar
+      analizeLastRow();
+    }
   }
+}
+
+void analizeLastRow(){
+  for(int i=0; i<numCasillas; i++){
+    if(checkLife(i)){
+      printNote(i);
+    }
+  }
+}
+
+void printNote(int i){
+  if(i==0){
+    print("Do3");
+  }else if(i==1){
+    print("Re3");
+  }else if(i==2){
+    print("Mi3");
+  }else if(i==3){
+    print("Fa3");
+  }else if(i==4){
+    print("Sol3");
+  }else if(i==5){
+    print("La3");
+  }else if(i==6){
+    print("Si3");
+  }
+}
+
+boolean checkLife(int i){
+  if(lastGeneration[i]==0){
+    return false;
+  }else{
+    return true;
   }
   
 }
 
-void displayRow(int[] generation,int x, int y){
-  //Calcula si es blanco o negro
-  int valueCasilla = generation[x/((int)cellWidth)];
-  if(valueCasilla==0){
+void swapArrays(int[]a, int[]b){
+  for(int i =0; i<a.length ; i++){
+    a[i]=b[i];
+  }
+}
+
+void displayRow(int numRow){
+  for(int i=0; i<numCasillas; i++){
+    //Calculo de la posición de la casilla
+    float x = i*cellWidth;
+    float y = numRow*cellHeight;
+    //Calculo del valor de la casilla
+    int value = currentGeneration[i];
+    
+    displayCasilla(value, x, y);
+  }
+}
+
+void displayCasilla(int value, float x, float y){
+  //Pinta la casilla de negro '1' o la pinta de blanco '0'
+  if(value==0){
     fill(255);
-  }else if(valueCasilla==1){
+  }else if(value==1){
     fill(0);
   }
   //Dibuja la casilla
@@ -54,22 +121,21 @@ void calculateNextGeneration(){
 
 int calculateCasilla(int n){
   int l, c, r;
- 
+  //Casilla Central
   c= currentGeneration[n];
- 
+  //Casilla de la izquierda
   if(n==0){
     l = currentGeneration[numCasillas-1];
   }else{
     l = currentGeneration[n-1];
   }
-   
+  //Casilla de la derecha
   if(n==numCasillas-1){
     r = currentGeneration[0];
   }else{
     r = currentGeneration[n+1];
   }
-  
-   println(l +" , "+ c +" , " +r);
+  //Cálculo del valor
   int Value = 4*l +c*2 +r;
   return rule[Value];
 }
