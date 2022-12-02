@@ -43,18 +43,9 @@ void setup(){
       print("Fa3_Corchera ");
     }
   }
-  //Este es condicional y llama a otras funciones peró no recursivo
+  //Este no es condicional ni llama a otras funciones ni es recursivo
   void D(){
-    //Se da un valor aleatorio a 'p' para posteriormente seleccionar una opción al azar; todas las opciones tienen una probabilidad del 33%.
-    float p = random(0,1);
-    //Transición:
-    if(p>0.00 && p<=0.33){
-      B(); print("Sol3_Negra ");
-    }else if(p>0.33 && p<=0.66){
-      print("Si3_Blanca "); 
-    }else if(p>0.66 && p<=1.00){
-      print("Mi3_Corchera "); C();
-    }
+    print("Re3_SemiCorchera "); print("Mi3_SemiCorchera "); print("Fa3_SemiCorchera "); print("Sol3_SemiCorchera ");
   }
   
   //Este no es condicional ni recursivo pero llama a otras funciones 
