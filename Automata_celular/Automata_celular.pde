@@ -1,4 +1,4 @@
-int[] rule = {0,0,1,0,1,1,0,0};  // Cellular Automata Rule (rule ___)
+int[] rule = {0,0,1,1,1,1,0,0};  // Cellular Automata Rule (rule ___)
 int[] firstRow = {0, 0, 0, 1, 0, 0, 0};
 int[] currentGeneration;
 int[] nextGeneration;
@@ -25,7 +25,11 @@ void setup(){
 
 void draw(){
   
-  if(frameCount <200){
+  if(frameCount<2){
+    //Se inicializa en la nota tonal
+  print("Do3_Negra ");
+  }
+  else if(frameCount <150 && frameCount>2){
     //Dibuja la línea correspondiente
     displayRow(numGeneration);
     
@@ -45,7 +49,11 @@ void draw(){
       swapArrays(lastGeneration, currentGeneration);
       //Se analizala última fila para saber que notas se van a tocar
       analizeLastRow();
+      
     }
+  }else if (frameCount>150 && frameCount<152){
+    //Se finaliza con la tónica hasta que se acabe el compás
+    print("Do3 ");
   }
 }
 
@@ -53,8 +61,24 @@ void analizeLastRow(){
   for(int i=0; i<numCasillas; i++){
     if(checkLife(i)){
       printNote(i);
+      //Se adjudica un Ritmo aleatorio
+      randomRythm();
     }
   }
+}
+
+void randomRythm(){
+  //Se da un valor aleatorio a 'p' para posteriormente selecicionar una opción al azar; todas las opciones tienen una probabilidad del 33%.
+  float p = random(0, 1);
+  
+  if(p<0.33){
+    print("_Negra ");
+  }else if(p>=0.33 && p<=0.50){
+    print("_Corchea ");
+  }else if(p>0.66 && p<=1.00){
+    print("_SemiCorchea ");
+  }
+  
 }
 
 void printNote(int i){

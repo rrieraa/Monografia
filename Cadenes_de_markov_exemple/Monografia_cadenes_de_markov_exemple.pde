@@ -1,16 +1,14 @@
 //Cadena de Markov de Les acompanyades -Els cavallets de Porreres-
-
 String currentNote ="Do2";
-String currentRithm="Negra";
-int melodyLenght;
+String currentRythm="Negra";
+int melodyLenght = 50;
 
 void setup(){
-  melodyLenght = 50;
   for(int i= 0; i<melodyLenght; i++){
     if(i!=melodyLenght-1){
-      print(currentNote + " " + currentRithm + "  ");
+      print(currentNote + " " + currentRythm + "  ");
       currentNote = nextNote(currentNote);
-      currentRithm= nextRithm(currentRithm);
+      currentRythm= nextRythm(currentRythm);
     } else{
       print ("Do2 Negra");
     }
@@ -18,21 +16,22 @@ void setup(){
   }
 }
 
-String nextRithm(String currentRithm){
+String nextRythm(String currentRythm){
+  //Se da un valor aleatorio a 'p' para posteriormente seleccionar una opción al azar en acuerdo a lo calculado
   float p = random(0,1);
-  if(currentRithm == "Negra"){
+  if(currentRythm == "Negra"){
     if(p<0.6){return "Corchea";}
     else{return "Semicorchea";}
-  }else if(currentRithm == "Corchea_con_punto"){
+  }else if(currentRythm == "Corchea_con_punto"){
     return "Semicorchea";
-  }else if(currentRithm == "Corchea"){
+  }else if(currentRythm == "Corchea"){
     if(p<0.14){return "Negra";}
     else if(p>=0.14 && p<0.35){return "Corchea_con_punto";}
     else if(p>=0.35 && p<0.64){return "Corchea";}
     else{return "Semicorchea";}
-  }else if(currentRithm == "Semicorchea_con_punto"){
+  }else if(currentRythm == "Semicorchea_con_punto"){
     return "Fusa";
-  }else if(currentRithm == "Semicorchea"){
+  }else if(currentRythm == "Semicorchea"){
     if(p<0.02){return "Negra";}
     else if(p>=0.02 && p<0.17){return "Corchea_con_punto";}
     else if(p>=0.17 && p<0.30){return "Corchea";}
@@ -46,6 +45,7 @@ String nextRithm(String currentRithm){
 }
 
 String nextNote(String currentNote){
+  //Se da un valor aleatorio a 'p' para posteriormente seleccionar una opción al azar en acuerdo a lo calculado
   float p = random(0,1);
   
   if(currentNote == "Si2"){
