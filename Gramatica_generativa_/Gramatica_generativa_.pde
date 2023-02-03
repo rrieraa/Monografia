@@ -5,50 +5,42 @@ Transicion[] TransicionesB = new Transicion[1];
 Transicion[] TransicionesC = new Transicion[4];
 Transicion[] TransicionesD = new Transicion[1];
 Transicion[] TransicionesE = new Transicion[1];
-String Melody = "A C ";
+String Melody = "AC";
 String output = "";
-boolean ended = false;
+int Iteration =0;
+
 void setup() {
+  
   setRules();
-  print("do3_ negra ");
+
+  while (!isMelodyEnded(Melody, Eventos)) {
+    output = "";
+    for (int c=0; c<Melody.length(); c++) {
+      char s = Melody.charAt(c);
+      boolean ruleApplied = false;
+      for (Rule r : rules) {
+        if (r.nombre==s) {
+          ruleApplied = true;
+          output += r.transicionar();
+        }
+      }
+      if(!ruleApplied){
+        output += s;
+      }
+    }
+    Melody = output;
+  }
+    println("Melody:\n" + "do3_negra " + output+ "do3");
 }
 
-void draw(){
-  //Comprovar si se ha acabado
-  for(int c=0; c<Melody.length(); c++){
-    char s = Melody.charAt(c);
-    for (Rule r : rules) {
-      if(r.nom==s){
-        ended = false;
-        break;
-      }else if(r.nom!=s){
-        ended = true;
-      }
-    }
-    if(!ended){
-      break;
+boolean isMelodyEnded(String M, String[] Events) {
+  for (int i=0; i<Events.length; i++) {
+    String event = Events[i];
+    if (M.indexOf(event)!=-1) {
+      return false;
     }
   }
-  
-  
-  if(!ended){
-    for (int c=0; c<Melody.length(); c++) {
-    char s = Melody.charAt(c);
-    for (Rule r : rules) {
-      if (r.nom==s) {
-        output ="";
-        output += r.transicionar();
-      }
-      
-    }
-  }
-  Melody = output;//Arreglar això
-  }else{
-    //Print Melody
-    print(Melody); 
-    print("do3");//El tiempo que se necesite para la finalización del compás
-    noLoop();
-  }
+  return true;
 }
 
 void setRules() {
@@ -81,6 +73,6 @@ void setTrnsiciones() {
   //Transiciones de D: No es condicional ni llama a otros eventos ni es recursivo
   TransicionesD[0] = new Transicion("re3_semicorchera mi3_semicorchera fa3_semicorchera sol3_semicorchera ", 1);
 
-  //Transiciones de E: No es condicional ni recursivo pero llama a otros eventos 
+  //Transiciones de E: No es condicional ni recursivo pero llama a otros eventos
   TransicionesE[0] = new Transicion("mi3_corchera C mi3_negra D ", 1);
 }

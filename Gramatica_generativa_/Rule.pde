@@ -1,15 +1,15 @@
 class Rule {
   //Atributos
-  char nom;
+  char nombre;
   Transicion[] transicion;
 
   //Constructor
-  Rule(char nom, Transicion ... t) {
-    this.nom = nom;
+  Rule(char n, Transicion ... t) {
+    this.nombre = n;
     this.transicion = t;
   }
 
-  String transicionar() {
+  String transicionar(){
     float p = 0;
     float r = random(0, 1);
     for (int i = 0; i<this.transicion.length; i++) {
